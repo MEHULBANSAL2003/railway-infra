@@ -7,9 +7,9 @@ services:
       - "127.0.0.1:8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/auth.properties
+      - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/auth-prod.properties
     volumes:
-      - ./secrets/auth.properties:/run/secrets/auth.properties:ro
+      - ./secrets/auth-prod.properties:/run/secrets/auth-prod.properties:ro
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
       interval: 30s
