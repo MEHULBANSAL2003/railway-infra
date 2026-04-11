@@ -10,6 +10,13 @@ services:
       - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/auth-prod.properties
     volumes:
       - ./secrets/auth-prod.properties:/run/secrets/auth-prod.properties:ro
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ap-south-1
+        awslogs-group: /railtick/prod/auth-service
+        awslogs-stream: auth-service
+        awslogs-create-group: "true"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
       interval: 30s
