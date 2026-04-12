@@ -29,7 +29,7 @@ services:
     container_name: railtick-main-dev
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8082:8080"
+      - "127.0.0.1:8082:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/main-dev.properties
