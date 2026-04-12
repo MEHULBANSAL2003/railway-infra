@@ -23,3 +23,28 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  main-service:
+    image: ghcr.io/mehulbansal2003/railway-main-service:latest
+    container_name: railtick-main-dev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/main-dev.properties
+    volumes:
+      - ./secrets/main-dev.properties:/run/secrets/main-dev.properties:ro
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ap-south-1
+        awslogs-group: /railtick/dev/main-service
+        awslogs-stream: main-service
+        awslogs-create-group: "true"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8082/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
