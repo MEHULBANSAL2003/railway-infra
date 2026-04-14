@@ -48,3 +48,28 @@ services:
       timeout: 10s
       retries: 3
       start_period: 60s
+
+  notification-service:
+    image: ghcr.io/mehulbansal2003/railway-notification-service:stable
+    container_name: railtick-notification-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8083:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CONFIG_IMPORT=optional:file:/run/secrets/notification-prod.properties
+    volumes:
+      - ./secrets/notification-prod.properties:/run/secrets/notification-prod.properties:ro
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ap-south-1
+        awslogs-group: /railtick/prod/notification-service
+        awslogs-stream: notification-service
+        awslogs-create-group: "true"
+    healthcheck:
+      test: [ "CMD", "wget", "-qO-", "http://localhost:8083/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
